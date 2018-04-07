@@ -3,7 +3,7 @@
 	url = git@github.com:OpenMotorDrive/libcanard.git
 [submodule "dsdl"]
 	path = dsdl
-	url = git@github.com:UAVCAN/dsdl.git
+	url = git@github.com:nikhil9/dsdl.git
 [submodule "ChibiOS"]
 	path = ChibiOS
 	url = git@github.com:OpenMotorDrive/ChibiOS.git
