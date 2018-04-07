@@ -60,5 +60,25 @@ struct pixart_instance_s{
 	enum pixart_type_t pixart_type;
 };
 
+struct pixart_motion_burst_s{
+    uint8_t motion;
+    uint8_t observation;
+    int16_t delta_x;
+    int16_t delta_y;
+    uint8_t squal;
+    uint8_t rawdata_sum;
+    uint8_t max_raw;
+    uint8_t min_raw;
+    uint8_t shutter_upper;
+    uint8_t shutter_lower;
+};
+
+union pixart_motion_busrt_u{
+	struct pixart_motion_burst_s burst_struct;
+	uint8_t burst_bytes[12];
+};
+
+
 
 bool pixart_init(struct pixart_instance_s* instance, uint8_t spi_idx, uint32_t select_line, enum pixart_type_t pixart_type);
+void pixart_read_motion_burst(struct pixart_instance_s* instance, struct pixart_motion_burst_s* motion_burst);

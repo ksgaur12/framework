@@ -10,10 +10,11 @@
 #define PIXART_DEBUG(...) {}
 #endif
 
+
 static void pixart_reg_write(struct pixart_instance_s* instance, uint8_t reg, uint8_t value);
 static uint8_t pixart_reg_read(struct pixart_instance_s* instance, uint8_t reg);
 
-static bool check_pixart_device_id(struct pixart_instance_s* instance);
+static bool pixart_check_device_id(struct pixart_instance_s* instance);
 
 bool pixart_init(struct pixart_instance_s* instance, uint8_t spi_idx, uint32_t select_line, enum pixart_type_t pixart_type){
 
@@ -26,7 +27,7 @@ bool pixart_init(struct pixart_instance_s* instance, uint8_t spi_idx, uint32_t s
 	pixart_reg_write(instance, PIXART_REG_POWER_RST, 0x5A);
 	chThdSleep(MS2ST(50));
 
-	if(!check_pixart_device_id(instance)){
+	if(!pixart_check_device_id(instance)){
 		PIXART_DEBUG("cannot detect pixart 39xx");
 		return false;
 	}
@@ -58,7 +59,7 @@ static uint8_t pixart_reg_read(struct pixart_instance_s* instance, uint8_t reg){
     return v;
 }
 
-static bool check_pixart_device_id(struct pixart_instance_s* instance){
+static bool pixart_check_device_id(struct pixart_instance_s* instance){
 	uint8_t id1 = pixart_reg_read(instance, PIXART_REG_PRODUCT_ID);
 	uint8_t id2 = pixart_reg_read(instance, PIXART_REG_INV_PROD_ID2);
 	PIXART_DEBUG("id1 %x", id1);
@@ -68,4 +69,20 @@ static bool check_pixart_device_id(struct pixart_instance_s* instance){
 		return true;
 	}
 	return false;
+}
+
+void pixart_read_motion_burst(struct pixart_instance_s* instance, struct pixart_motion_burst_s* motion_burst){
+
+	uint8_t b[12];
+
+    uint8_t reg = PIXART_REG_MOT_BURST2;
+
+    spi_device_begin(&instance->spi_dev);
+    spi_device_send(&instance->spi_dev, sizeof(reg), &reg);
+    chThdSleep(US2ST(150));
+    spi_device_receive(&instance->spi_dev, sizeof(b), &b);
+    spi_device_end(&instance->spi_dev);
+    memcpy(motion_burst, b, sizeof(b));
+
+
 }
