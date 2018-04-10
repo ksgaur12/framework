@@ -1,0 +1,1 @@
+MESSAGES_ENABLED += hex.optic_flow.OpticFlow

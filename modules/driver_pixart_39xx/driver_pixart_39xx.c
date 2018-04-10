@@ -1,5 +1,8 @@
 #include "driver_pixart_39xx.h"
 #include <common/bswap.h>
+#include <modules/uavcan/uavcan.h>
+#include <string.h>
+
 
 #define MODULE_UAVCAN_DEBUG_ENABLED 1
 
@@ -17,6 +20,8 @@ static uint8_t pixart_reg_read(struct pixart_instance_s* instance, uint8_t reg);
 static bool pixart_check_device_id(struct pixart_instance_s* instance);
 
 bool pixart_init(struct pixart_instance_s* instance, uint8_t spi_idx, uint32_t select_line, enum pixart_type_t pixart_type){
+
+	(void)pixart_type;
 
 	PIXART_DEBUG("pixart_init");
 
@@ -83,6 +88,16 @@ void pixart_read_motion_burst(struct pixart_instance_s* instance, struct pixart_
     spi_device_receive(&instance->spi_dev, sizeof(b), &b);
     spi_device_end(&instance->spi_dev);
     memcpy(motion_burst, b, sizeof(b));
+}
 
+void pixart_flow_msg_broadcast(int16_t _delta_x, int16_t _delta_y, uint8_t _quality){
+
+	struct hex_optic_flow_OpticFlow_s flow_msg;
+
+	flow_msg.raw_flow_x = _delta_x;
+	flow_msg.raw_flow_y = _delta_y;
+	flow_msg.qaulity = _quality;
+
+    uavcan_broadcast(0, &hex_optic_flow_OpticFlow_descriptor, CANARD_TRANSFER_PRIORITY_LOWEST, &flow_msg);
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <modules/spi_device/spi_device.h>
+#include <hex.optic_flow.OpticFlow.h>
 
 #define PIXART_REG_PRODUCT_ID  0x00
 #define PIXART_REG_REVISION_ID 0x01
@@ -81,4 +82,7 @@ union pixart_motion_busrt_u{
 
 
 bool pixart_init(struct pixart_instance_s* instance, uint8_t spi_idx, uint32_t select_line, enum pixart_type_t pixart_type);
+
 void pixart_read_motion_burst(struct pixart_instance_s* instance, struct pixart_motion_burst_s* motion_burst);
+
+void pixart_flow_msg_broadcast(int16_t _delta_x, int16_t _delta_y, uint8_t _quality);
