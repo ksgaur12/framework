@@ -1,0 +1,27 @@
+
+#include <hal.h>
+
+
+#define MS5525D0_I2C_ADDR_1 0x76
+#define MS5525D0_I2C_ADDR_2 0x77
+
+#define REG_RESET               0x1E
+#define REG_CONVERT_D1_OSR_256  0x40
+#define REG_CONVERT_D1_OSR_512  0x42
+#define REG_CONVERT_D1_OSR_1024 0x44
+#define REG_CONVERT_D1_OSR_2048 0x46
+#define REG_CONVERT_D1_OSR_4096 0x48
+#define REG_CONVERT_D2_OSR_256  0x50
+#define REG_CONVERT_D2_OSR_512  0x52
+#define REG_CONVERT_D2_OSR_1024 0x54
+#define REG_CONVERT_D2_OSR_2048 0x56
+#define REG_CONVERT_D2_OSR_4096 0x58
+#define REG_ADC_READ            0x00
+#define REG_PROM_BASE           0xA0
+#define REG_CONVERT_PRESSURE    REG_CONVERT_D1_OSR_1024
+#define REG_CONVERT_TEMPERATURE REG_CONVERT_D2_OSR_1024
+
+
+void ms5525_i2c_init();
+
+void ms5525_i2c_read_data();
